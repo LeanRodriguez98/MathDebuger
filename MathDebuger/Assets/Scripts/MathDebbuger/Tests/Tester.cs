@@ -26,6 +26,7 @@ public class Tester : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
+            StartCoroutine(UpdateVector());
         }
 
         if (Input.GetKeyDown(KeyCode.O))
@@ -40,10 +41,15 @@ public class Tester : MonoBehaviour
 
     IEnumerator UpdateVector()
     {
-        for (int i = 0; i < 100; i++)
+        for (float i = 0.0f; i <= 360.0f; i += 1.0f)
         {
-            //Vector3Debugger.UpdatePosition("elAzul", new Vector3(2.4f, 6.3f, 0.5f) * (i * 0.05f));
-            yield return new WaitForSeconds(0.2f);
+            List<Vector3> vectors = new List<Vector3>();
+            for (int j = 0; j < Vector3Debugger.GetVectorsPositions("secuencia").Count; j++)
+            {
+                vectors.Add(Quaternion.Euler(new Vec3(0.0f, 1.0f, 0.0f)) * Vector3Debugger.GetVectorsPositions("secuencia")[j]);
+            }
+            Vector3Debugger.UpdatePositionsSecuence("secuencia", vectors);
+            yield return null;
         }
     }
 

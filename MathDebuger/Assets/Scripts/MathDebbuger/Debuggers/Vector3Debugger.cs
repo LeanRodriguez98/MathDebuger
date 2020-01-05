@@ -209,5 +209,12 @@ namespace MathDebbuger
             if (ExistKey(identifier))
                 debuggers[identifier].enabled = true;
         }
+
+        public static List<Vector3> GetVectorsPositions(string identifier) 
+        {
+            if (ExistKey(identifier))
+                return debuggers[identifier].GetPositions();
+            return new List<Vector3>();
+        }
     }
 }

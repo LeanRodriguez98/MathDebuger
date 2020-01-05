@@ -191,6 +191,11 @@ namespace MathDebbuger
                     style.fontSize = size;
                 }
 
+                public List<Vector3> GetPositions() 
+                {
+                    return vectorsPositions;
+                }
+
                 void OnPostRender()
                 {
                     DrawVector();
