@@ -137,7 +137,8 @@ namespace MathDebbuger
             {
                 private Material vectorMaterial;
                 private List<Vector3> vectorsPositions;
-                private bool showInEditor;
+                private bool showInEditor = false;
+                private bool showCoordinates = false;
                 private Mesh coneMesh;
                 private VectorArrow vectorArrow = VectorArrow.DefaultValue;
                 private GUIStyle style = new GUIStyle();
@@ -182,6 +183,16 @@ namespace MathDebbuger
                 {
                     showInEditor = false;
                 }
+
+                public void EnableShowCoordinates()
+                {
+                    showCoordinates = true;
+                }
+                public void DisableShowCoordinates()
+                {
+                    showCoordinates = false;
+                }
+
                 public void Delete()
                 {
                     Destroy(this);
@@ -191,7 +202,7 @@ namespace MathDebbuger
                     style.fontSize = size;
                 }
 
-                public List<Vector3> GetPositions() 
+                public List<Vector3> GetPositions()
                 {
                     return vectorsPositions;
                 }
@@ -199,34 +210,30 @@ namespace MathDebbuger
                 void OnPostRender()
                 {
                     DrawVector();
-                   // for (int i = 0; i < vectorsPositions.Count; i++)
-                   // {
-                   //     VectorHandles.instance.AddToGameDictionary(vectorsPositions[i], style);
-                   // }
+                    if (showCoordinates)
+                        DrawCoordinates();
                 }
                 void OnDrawGizmos()
                 {
                     if (showInEditor)
                     {
                         DrawVector();
-                     //   for (int i = 0; i < vectorsPositions.Count; i++)
-                     //   {
-                     //       VectorHandles.instance.AddToSceneDictionary(vectorsPositions[i], style);
-                     //
-                     //   }
+                        if (showCoordinates)
+                            DrawCoordinates();
                     }
                 }
 
-                private void Update()
-                {
-                    //for (int i = 0; i < vectorsPositions.Count; i++)
-                    //{
-                    //    VectorHandles.instance.AddToGameDictionary(vectorsPositions[i], style);
-                    //    if (showInEditor)
-                    //        VectorHandles.instance.AddToSceneDictionary(vectorsPositions[i], style);
-                    //}
-                }
 
+                private void DrawCoordinates()
+                {
+                    for (int i = 0; i < vectorsPositions.Count; i++)
+                    {
+                        string coordinatesText = "X = " + vectorsPositions[i].x.ToString("0.000") +
+                                               "\nY = " + vectorsPositions[i].y.ToString("0.000") +
+                                               "\nZ = " + vectorsPositions[i].z.ToString("0.000");
+                        Handles.Label(vectorsPositions[i], coordinatesText, style);
+                    }
+                }
                 void DrawVector()
                 {
                     for (int i = 0; i < vectorsPositions.Count - 1; i++)
@@ -240,12 +247,6 @@ namespace MathDebbuger
                         Graphics.DrawMeshNow(coneMesh, vectorsPositions[i + 1] - (arrowRotation * new Vector3(0.0f, vectorArrow.height, 0.0f)), arrowRotation);
                         GL.End();
                     }
-
-                     for (int i = 0; i < vectorsPositions.Count; i++)
-                     {
-                         string coordinatesText = "X = " + vectorsPositions[i].x.ToString() + "\nY = " + vectorsPositions[i].y.ToString() + "\nZ = " + vectorsPositions[i].z.ToString();
-                         Handles.Label(vectorsPositions[i], coordinatesText, style);
-                     }
                 }
 
                 //from: https://gist.github.com/mattatz/aba0d06fa56ef65e45e2
